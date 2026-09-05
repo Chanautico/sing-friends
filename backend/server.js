@@ -9,15 +9,15 @@ import { moderateMessage } from './src/moderation.js'
 import miscRoutes from './src/miscRoutes.js'
 import { recordScoreEntry } from './src/scoreService.js'
 
-// Allowlist de origens permitidas — configurável via variável de ambiente FRONTEND_URL
-// (aceita uma URL ou várias separadas por vírgula, útil pra incluir preview deploys da
-// Vercel além do domínio de produção). Sem FRONTEND_URL definida, cai em localhost — ou
-// seja, em produção SEM configurar essa variável, o CORS bloqueia o frontend de verdade
-// (fail-safe: bloquear por engano é seguro; liberar tudo por engano, não).
-const allowedOrigins = (process.env.FRONTEND_URL || 'http://localhost:5173')
+// Allowlist de origens permitidas — inclui explicitamente o seu domínio da Vercel
+// e permite adicionar mais via variável de ambiente FRONTEND_URL se necessário.
+const defaultOrigins = ['https://sing-friends.vercel.app', 'http://localhost:5173']
+const envOrigins = (process.env.FRONTEND_URL || '')
   .split(',')
   .map((url) => url.trim())
   .filter(Boolean)
+
+const allowedOrigins = [...new Set([...defaultOrigins, ...envOrigins])]
 
 const corsOptions = {
   origin(origin, callback) {
