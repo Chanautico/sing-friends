@@ -21,8 +21,11 @@ const allowedOrigins = [...new Set([...defaultOrigins, ...envOrigins])]
 
 const corsOptions = {
   origin(origin, callback) {
-    // `origin` vem undefined em chamadas sem navegador (curl, health checks) — permite.
-    if (!origin || allowedOrigins.includes(origin)) return callback(null, true)
+    // Permite qualquer requisição sem origem (como health checks ou mobile) 
+    // ou qualquer app hospedado na Vercel (*.vercel.app) e localhost
+    if (!origin || origin.endsWith('.vercel.app') || origin.includes('localhost')) {
+      return callback(null, true)
+    }
     callback(new Error(`Origem não permitida pelo CORS: ${origin}`))
   },
   credentials: true,
