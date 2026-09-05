@@ -1,0 +1,29 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../backend/node_modules/.prisma/client"
+}
+
+// Sem login: cada linha é uma "atuação" (nome digitado + pontos numa música), sem conta
+// de usuário por trás. O ranking em /api/leaderboard soma por `name` — ver a explicação
+// completa em backend/src/scoreService.js sobre o que isso significa na prática.
+model ScoreEntry {
+  id        String   @id @default(uuid())
+  name      String
+  songTitle String
+  points    Int
+  roomCode  String?
+  createdAt DateTime @default(now())
+}
+
+model Room {
+  code      String   @id
+  hostId    String
+  queueJson String   @default("[]") // Guarda a fila de músicas em JSON
+  isPublic  Boolean  @default(false) // aparece na listagem de "Salas Públicas" do lobby
+  createdAt DateTime @default(now())
+}
