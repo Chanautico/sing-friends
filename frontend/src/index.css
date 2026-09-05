@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Temas: cada um define só duas cores (--accent-primary/--accent-secondary), como
+ * canais RGB separados por espaço — formato que o Tailwind entende dentro de
+ * rgb(var(--x) / <alpha>), usado nas classes arbitrárias dos componentes
+ * (ex: text-[rgb(var(--accent-primary))], bg-[rgb(var(--accent-primary)/0.2)]).
+ * Trocar o tema é só trocar essas duas variáveis — nenhum componente precisa saber
+ * qual tema está ativo, só usa as variáveis o tempo todo.
+ */
+:root,
+[data-theme='neon'] {
+  --accent-primary: 217 70 239; /* fuchsia-600 */
+  --accent-secondary: 34 211 238; /* cyan-400 */
+}
+[data-theme='sunset'] {
+  --accent-primary: 249 115 22; /* orange-500 */
+  --accent-secondary: 236 72 153; /* pink-500 */
+}
+[data-theme='ocean'] {
+  --accent-primary: 14 165 233; /* sky-500 */
+  --accent-secondary: 20 184 166; /* teal-500 */
+}
+[data-theme='mono'] {
+  --accent-primary: 226 232 240; /* slate-200 */
+  --accent-secondary: 148 163 184; /* slate-400 */
+}
+
+@layer base {
+  html, body, #root { height: 100%; }
+  h1, h2, h3 { @apply tracking-wide; }
+}
+
+@keyframes floatUp {
+  0%   { opacity: 0; transform: translateY(0) scale(0.85); }
+  15%  { opacity: 1; transform: translateY(-6px) scale(1); }
+  75%  { opacity: 1; transform: translateY(-28px) scale(1); }
+  100% { opacity: 0; transform: translateY(-42px) scale(0.95); }
+}
+.animate-float-up {
+  animation: floatUp 1.1s ease-out forwards;
+}
